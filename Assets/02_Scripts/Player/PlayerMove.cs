@@ -6,21 +6,20 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    [Header("총알 관련")]
-    public GameObject bulletPrefab; // 발사할 총알 프리팹
-    public Transform bulletSpawnPoint; // 총알이 발사될 위치
-    public float bulletSpeed = 10f;
-
     // 참조 -> 복합형 -> 단순변수
     //[Header("정리")]
     //public GameObject A;
     //public Vector2 B;
     //public int C;
 
+    [Header("총알 관련")]
+    public GameObject bulletPrefab; // 발사할 총알 프리팹
+    public Transform bulletSpawnPoint; // 총알이 발사될 위치
+    public float bulletSpeed = 10f;
+
     [Header("이동 관련")]
     private Rigidbody2D playerRigidbody;
     public float moveSpeed;
-
 
     [Header("카메라 관련")]
     public CinemachineVirtualCamera playerVcam;
@@ -29,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     [Header("크기 괸련")]
     int ScaleCount = 0;
     float radius = 1f;
+
     public float Radius
     {
         get { return radius; }
@@ -36,10 +36,9 @@ public class PlayerMove : MonoBehaviour
         {
             radius = value;
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
-            playerVcam.m_Lens.OrthographicSize = radius * 5;
+          //  playerVcam.m_Lens.OrthographicSize = radius * 5;
         }
     }
-
 
     private void Awake()
     {
@@ -65,6 +64,7 @@ public class PlayerMove : MonoBehaviour
 
         playerRigidbody.velocity = moveInput * moveSpeed;
         //transform.Translate(moveInput.normalized * Time.deltaTime * moveSpeed);
+
     }
 
     void Shoot()
@@ -75,6 +75,8 @@ public class PlayerMove : MonoBehaviour
 
         bullet.transform.position = bulletSpawnPoint.position;
         bullet.gameObject.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+
+       
 
         ScaleCount++;
         Radius += 0.2f;
