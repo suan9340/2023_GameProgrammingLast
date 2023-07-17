@@ -1,53 +1,82 @@
+using Cinemachine;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class PlayerMove : MonoBehaviour
 {
-    public float moveSpeed = 8.0f;
+    [Header("총알 관련")]
+    public GameObject bulletPrefab; // 발사할 총알 프리팹
+    public Transform bulletSpawnPoint; // 총알이 발사될 위치
+    public float bulletSpeed = 10f;
+
+    // 참조 -> 복합형 -> 단순변수
+    //[Header("정리")]
+    //public GameObject A;
+    //public Vector2 B;
+    //public int C;
+
+    [Header("이동 관련")]
     private Rigidbody2D playerRigidbody;
+    public float moveSpeed;
 
-    // 미사일 프리팹
-    public GameObject missilePrefab;
 
-    // 미사일이 발사되는 순간의 속도
-    public float launchSpeed = 10.0f;
+    [Header("카메라 관련")]
+    public CinemachineVirtualCamera playerVcam;
+    public Camera cam;
+
+    [Header("크기 괸련")]
+    int ScaleCount = 0;
+    float radius = 1f;
+    public float Radius
+    {
+        get { return radius; }
+        set
+        {
+            radius = value;
+            transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
+            playerVcam.m_Lens.OrthographicSize = radius * 5;
+        }
+    }
+
+
     private void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
-    {
-    }
-
     void Update()
     {
         Move();
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Shoot();
+        }
     }
 
-       
+    void Move()
+    {
+        Vector2 moveInput;
+        moveInput.x = Input.GetAxisRaw("Horizontal");
+        moveInput.y = Input.GetAxisRaw("Vertical");
+        moveInput.Normalize();
 
-       void Move()
-        {
-            if (Input.GetKey(KeyCode.D))
-            {
-                transform.Translate(0.05f, 0f, 0f);
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                transform.Translate(-0.05f, 0f, 0f);
-            }
-            if (Input.GetKey(KeyCode.W))
-            {
-                transform.Translate(0f, 0.05f, 0f);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                transform.Translate(0f, -0.05f, 0f);
-            }
+        playerRigidbody.velocity = moveInput * moveSpeed;
+        //transform.Translate(moveInput.normalized * Time.deltaTime * moveSpeed);
+    }
 
-        }
-    
+    void Shoot()
+    {
+        Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - cam.transform.position;
+        dir.Normalize();
+        GameObject bullet = Instantiate(bulletPrefab);
+
+        bullet.transform.position = bulletSpawnPoint.position;
+        bullet.gameObject.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+
+        ScaleCount++;
+        Radius += 0.2f;
+    }
 }
