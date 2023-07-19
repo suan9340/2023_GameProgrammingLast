@@ -25,8 +25,8 @@ public class PlayerMove : MonoBehaviour
     public CinemachineVirtualCamera playerVcam;
     public Camera cam;
 
-    [Header("크기 괸련")]
-    int ScaleCount = 0;
+    [Header("크기 관련")]
+   // int ScaleCount = 0;
     float radius = 1f;
 
     public float Radius
@@ -36,7 +36,9 @@ public class PlayerMove : MonoBehaviour
         {
             radius = value;
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
-          //  playerVcam.m_Lens.OrthographicSize = radius * 5;
+
+            //시네머신 카메라 
+            //playerVcam.m_Lens.OrthographicSize = radius * 5;
         }
     }
 
@@ -53,6 +55,8 @@ public class PlayerMove : MonoBehaviour
         {
             Shoot();
         }
+
+       
     }
 
     void Move()
@@ -73,12 +77,14 @@ public class PlayerMove : MonoBehaviour
         dir.Normalize();
         GameObject bullet = Instantiate(bulletPrefab);
 
+        bullet.GetComponent<Bullet>().Init(this);
+
         bullet.transform.position = bulletSpawnPoint.position;
-        bullet.gameObject.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+        bullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+    }
 
-       
-
-        ScaleCount++;
+    public void PlayerScaleControll()
+    {
         Radius += 0.2f;
     }
 }
