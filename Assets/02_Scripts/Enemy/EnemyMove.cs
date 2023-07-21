@@ -5,34 +5,30 @@ using UnityEngine;
 public class EnemyMove : MonoBehaviour
 {
 
-    public Vector2 size;
-    public LayerMask whatIsLayer;
+    private Rigidbody2D enemyRigidbody2D;
+    private Transform target;
+
+    [Header("추격 속도")]
+    [SerializeField] [Range(1f,4f)] float moveSpeed = 3f;
+
+    [Header("근접 거리")]
+    [SerializeField][Range(1f, 4f)] float contact = 3f;
 
 
-    void Start()
-    {
-      
-    }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, size);
-    }
+
     void Update()
     {
-        if(Input.GetMouseButtonDown(1))
-        {
-            
-            Collider2D hit = Physics2D.OverlapBox(transform.position, size, 0, whatIsLayer);
-            Debug.Log(hit.name);
-        }
+      
       
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        if (collision.CompareTag("BULLET"))
+        {
+            Destroy(gameObject);
+        }
     }
 
 
