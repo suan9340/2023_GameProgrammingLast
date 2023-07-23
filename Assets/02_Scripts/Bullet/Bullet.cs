@@ -11,11 +11,6 @@ public class Bullet : MonoBehaviour
 
     private PlayerMove player;
 
-    private void Start()
-    {
-    }
-
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("BORDER"))

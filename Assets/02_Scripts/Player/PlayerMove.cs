@@ -13,8 +13,8 @@ public class PlayerMove : MonoBehaviour
     //public int C;
 
     [Header("총알 관련")]
-    public GameObject bulletPrefab; // 발사할 총알 프리팹
-    public Transform bulletSpawnPoint; // 총알이 발사될 위치
+    public GameObject bulletPrefab; 
+    public Transform bulletSpawnPoint; 
     public float bulletSpeed = 10f;
 
     [Header("이동 관련")]
@@ -26,7 +26,6 @@ public class PlayerMove : MonoBehaviour
     public Camera cam;
 
     [Header("크기 관련")]
-   // int ScaleCount = 0;
     float radius = 1f;
 
     public float Radius
@@ -38,7 +37,7 @@ public class PlayerMove : MonoBehaviour
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
 
             //시네머신 카메라 
-            //playerVcam.m_Lens.OrthographicSize = radius * 5;
+            playerVcam.m_Lens.OrthographicSize = radius * 3;
         }
     }
 
@@ -55,8 +54,6 @@ public class PlayerMove : MonoBehaviour
         {
             Shoot();
         }
-
-       
     }
 
     void Move()
@@ -67,8 +64,6 @@ public class PlayerMove : MonoBehaviour
         moveInput.Normalize();
 
         playerRigidbody.velocity = moveInput * moveSpeed;
-        //transform.Translate(moveInput.normalized * Time.deltaTime * moveSpeed);
-
     }
 
     void Shoot()
@@ -78,6 +73,7 @@ public class PlayerMove : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab);
 
         bullet.GetComponent<Bullet>().Init(this);
+        
 
         bullet.transform.position = bulletSpawnPoint.position;
         bullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
@@ -85,6 +81,6 @@ public class PlayerMove : MonoBehaviour
 
     public void PlayerScaleControll()
     {
-        Radius += 0.2f;
+        Radius += 0.5f;
     }
 }
