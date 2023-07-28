@@ -5,8 +5,15 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     public bool enableSpawn = false;
+
     public GameObject Enemy;
     public PlayerMove PlayerMoveScript;
+
+    void Start()
+    {
+        InvokeRepeating("SpawnEnemy", 1, 5);
+    }
+
     void SpawnEnemy()
     {
         float randomX = Random.Range(-25f, 25f); 
@@ -19,8 +26,5 @@ public class SpawnManager : MonoBehaviour
             enemy.GetComponent<EnemyMove>().EnemyInit(PlayerMoveScript);
         }
     }
-    void Start()
-    {
-        InvokeRepeating("SpawnEnemy", 1, 5); 
-    }
+   
 }

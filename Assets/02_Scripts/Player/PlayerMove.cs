@@ -1,7 +1,6 @@
 using Cinemachine;
 using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
@@ -27,6 +26,7 @@ public class PlayerMove : MonoBehaviour
 
     [Header("크기 관련")]
     float radius = 1f;
+    float scaleSpeed = 0.1f;
 
     public float Radius
     {
@@ -46,6 +46,11 @@ public class PlayerMove : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void Start()
+    {
+        StartCoroutine("PlayerScale", 0.5f);
+    }
+
     void Update()
     {
         Move();
@@ -54,24 +59,24 @@ public class PlayerMove : MonoBehaviour
         {
             Shoot();
         }
-    }
 
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+   
     void Move()
     {
+        // 키보드 입력 받기
         Vector2 moveInput;
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
 
+        // 플레이어 이동
         playerRigidbody.velocity = moveInput * moveSpeed;
 
-        // ScreenToWorldPoint() 함수를 이용해 마우스의 좌표를 게임 좌표로 변환한다.
-        // 2D게임이기에 Vector2로 변환
-        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        // (마우스 위치 - 오브젝트 위치)로 마우스의 방향을 구한다.
+        // 마우스 위치 방향을 보기
+        Vector2 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector2 dirVec = mousePos - (Vector2)transform.position;
-
-        // 방향벡터를 정규화한 다음 transform.up 벡터에 계속 대입
         transform.up = dirVec.normalized;
     }
 
@@ -79,18 +84,42 @@ public class PlayerMove : MonoBehaviour
     {
         Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - cam.transform.position;
         dir.Normalize();
+
         GameObject bullet = Instantiate(bulletPrefab);
-
         bullet.GetComponent<Bullet>().Init(this);
-
-
         bullet.transform.position = bulletSpawnPoint.position;
         bullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
-
     }
 
     public void PlayerScaleControll()
     {
         Radius += 0.5f;
     }
+
+    IEnumerator PlayerScale(float delayTime)
+    {
+        if(transform.localScale.x < 0 && transform.localScale.y < 0)
+        {
+            PlayerDie();
+            yield return 0;
+        }
+        else
+        {
+            Debug.Log($"스케일 {transform.localScale}");
+
+            transform.localScale = new Vector3(transform.localScale.x - 100f * scaleSpeed * Time.deltaTime,
+                transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
+
+            yield return new WaitForSeconds(delayTime);
+
+            StartCoroutine("PlayerScale", 0.5f);
+        }
+    }
+
+    void PlayerDie()
+    {
+        gameObject.SetActive(false);
+        Debug.Log("게임 오버");
+    }
+
 }
