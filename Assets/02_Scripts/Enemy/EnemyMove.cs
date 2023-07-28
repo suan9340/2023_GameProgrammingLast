@@ -4,29 +4,22 @@ using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
 {
-    private float enemyMoveSpeed =1.5f;
+    private float enemyMoveSpeed =2f;
 
     private PlayerMove target;
-
-    public void EnemyInit(PlayerMove owner)
-    {
-        target = owner;
-    }
 
     void Update()
     {
         float dis = Vector2.Distance(transform.position, target .gameObject.transform.position);
 
-        if (dis <= 10) 
+        if (dis <= 10)
         {
             Move();
         }
-        else return;
-    }
-
-    void Move()
-    {
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, enemyMoveSpeed * Time.deltaTime);
+        else
+        {
+            RandomMove();
+        };
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -37,5 +30,24 @@ public class EnemyMove : MonoBehaviour
         }
     }
 
-    
+    void Move()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, 
+            target.transform.position, enemyMoveSpeed * Time.deltaTime);
+    }
+
+    void RandomMove()
+    {
+        float randomX = Random.Range(-25f, 25f);
+        float randomY = Random.Range(-17f, 17f);
+
+        transform.position = Vector2.MoveTowards(transform.position, 
+            new Vector3(randomX,randomY,0), enemyMoveSpeed * Time.deltaTime);
+    }
+
+    public void EnemyInit(PlayerMove owner)
+    {
+        target = owner;
+    }
+
 }

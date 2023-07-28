@@ -64,6 +64,15 @@ public class PlayerMove : MonoBehaviour
         moveInput.Normalize();
 
         playerRigidbody.velocity = moveInput * moveSpeed;
+
+        // ScreenToWorldPoint() 함수를 이용해 마우스의 좌표를 게임 좌표로 변환한다.
+        // 2D게임이기에 Vector2로 변환
+        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        // (마우스 위치 - 오브젝트 위치)로 마우스의 방향을 구한다.
+        Vector2 dirVec = mousePos - (Vector2)transform.position;
+
+        // 방향벡터를 정규화한 다음 transform.up 벡터에 계속 대입
+        transform.up = dirVec.normalized;
     }
 
     void Shoot()
@@ -73,10 +82,11 @@ public class PlayerMove : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab);
 
         bullet.GetComponent<Bullet>().Init(this);
-        
+
 
         bullet.transform.position = bulletSpawnPoint.position;
         bullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+
     }
 
     public void PlayerScaleControll()
