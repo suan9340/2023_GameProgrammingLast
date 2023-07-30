@@ -2,12 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class EnemyBullet : MonoBehaviour
 {
     public float moveSpeed = 10.0f;
-    public bool isEnemy = false;
-
-    private PlayerMove player;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,17 +12,9 @@ public class Bullet : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        else if (collision.CompareTag("ENEMY"))
+        else if (collision.CompareTag("Player"))
         {
-            isEnemy = true;
             Destroy(gameObject);
-
-            player.PlayerScaleControll();
         }
-    }
-
-    public void Init(PlayerMove owner)
-    {
-        player = owner;
     }
 }

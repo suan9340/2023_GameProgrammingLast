@@ -102,12 +102,11 @@ public class PlayerMove : MonoBehaviour
     {
         if(transform.localScale.x < 0 && transform.localScale.y < 0)
         {
-            PlayerDie();
+          //  PlayerDie();
             yield return 0;
         }
         else
         {
-            Debug.Log($"½ºÄÉÀÏ {transform.localScale}");
 
             PlayerScale();
 

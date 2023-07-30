@@ -8,9 +8,18 @@ public class EnemyMove : MonoBehaviour
 
     private PlayerMove target;
 
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
+    public float bulletSpeed = 10f;
+
+    private void Start()
+    {
+        InvokeRepeating("Shoot", 1, 2);
+    }
+
     void Update()
     {
-        float dis = Vector2.Distance(transform.position, target .gameObject.transform.position);
+        float dis = Vector2.Distance(transform.position, target.gameObject.transform.position);
 
         if (dis <= 10)
         {
@@ -20,6 +29,8 @@ public class EnemyMove : MonoBehaviour
         {
             RandomMove();
         };
+
+      
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -34,6 +45,14 @@ public class EnemyMove : MonoBehaviour
     {
         transform.position = Vector2.MoveTowards(transform.position, 
             target.transform.position, enemyMoveSpeed * Time.deltaTime);
+    }
+
+    void Shoot()
+    {
+       GameObject enemyBullet = Instantiate(bulletPrefab);
+       enemyBullet.transform.position = transform.position;
+        Vector2 dir = target.gameObject.transform.position - transform.position;
+        enemyBullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
     }
 
     void RandomMove()
