@@ -10,7 +10,7 @@ public class EnemyMove : MonoBehaviour
 
     public GameObject bulletPrefab;
     public Transform bulletSpawnPoint;
-    public float bulletSpeed = 10f;
+    public float bulletSpeed = 2f;
 
     private void Start()
     {
@@ -51,7 +51,9 @@ public class EnemyMove : MonoBehaviour
     {
        GameObject enemyBullet = Instantiate(bulletPrefab);
        enemyBullet.transform.position = transform.position;
+
         Vector2 dir = target.gameObject.transform.position - transform.position;
+        dir.Normalize();
         enemyBullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
     }
 
