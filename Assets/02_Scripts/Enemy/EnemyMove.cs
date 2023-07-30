@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class EnemyMove : MonoBehaviour
 {
+    private float enemyMoveSpeed =2f;
 
-    private Rigidbody2D enemyRigidbody2D;
-    private Transform target;
+    private PlayerMove target;
 
-    [Header("추격 속도")]
-    [SerializeField] [Range(1f,4f)] float moveSpeed = 3f;
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
+    public float bulletSpeed = 2f;
 
-    [Header("근접 거리")]
-    [SerializeField][Range(1f, 4f)] float contact = 3f;
-
-
-
+    private void Start()
+    {
+        InvokeRepeating("Shoot", 1, 2);
+    }
 
     void Update()
     {
-      
+        float dis = Vector2.Distance(transform.position, target.gameObject.transform.position);
+
+        if (dis <= 10)
+        {
+            Move();
+        }
+        else
+        {
+            RandomMove();
+        };
+
       
     }
 
@@ -31,5 +41,34 @@ public class EnemyMove : MonoBehaviour
         }
     }
 
+    void Move()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, 
+            target.transform.position, enemyMoveSpeed * Time.deltaTime);
+    }
+
+    void Shoot()
+    {
+       GameObject enemyBullet = Instantiate(bulletPrefab);
+       enemyBullet.transform.position = transform.position;
+
+        Vector2 dir = target.gameObject.transform.position - transform.position;
+        dir.Normalize();
+        enemyBullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+    }
+
+    void RandomMove()
+    {
+        float randomX = Random.Range(-25f, 25f);
+        float randomY = Random.Range(-17f, 17f);
+
+        transform.position = Vector2.MoveTowards(transform.position, 
+            new Vector3(randomX,randomY,0), enemyMoveSpeed * Time.deltaTime);
+    }
+
+    public void EnemyInit(PlayerMove owner)
+    {
+        target = owner;
+    }
 
 }

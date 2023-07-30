@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -951994045014685919}
   - component: {fileID: 5936601198760607854}
   m_Layer: 0
-  m_Name: Enermy
+  m_Name: Enemy
   m_TagString: ENEMY
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,10 +99,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b28b011baf11d41a17591082a9b83b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 10, y: 10}
-  whatIsLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  bulletPrefab: {fileID: 382435890997194421, guid: 8ef30417b12f9844db1019a8321e973d, type: 3}
+  bulletSpawnPoint: {fileID: 4529018525944182224}
+  bulletSpeed: 10
 --- !u!58 &-951994045014685919
 CircleCollider2D:
   m_ObjectHideFlags: 0
