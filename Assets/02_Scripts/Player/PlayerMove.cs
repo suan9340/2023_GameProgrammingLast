@@ -89,6 +89,8 @@ public class PlayerMove : MonoBehaviour
         bullet.GetComponent<Bullet>().Init(this);
         bullet.transform.position = bulletSpawnPoint.position;
         bullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+
+        PlayerScale();
     }
 
     public void PlayerScaleControll()
@@ -107,10 +109,9 @@ public class PlayerMove : MonoBehaviour
         {
             Debug.Log($"스케일 {transform.localScale}");
 
-            transform.localScale = new Vector3(transform.localScale.x - 100f * scaleSpeed * Time.deltaTime,
-                transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
+            PlayerScale();
 
-            yield return new WaitForSeconds(delayTime);
+             yield return new WaitForSeconds(delayTime);
 
             StartCoroutine("PlayerScale", 0.5f);
         }
@@ -122,4 +123,9 @@ public class PlayerMove : MonoBehaviour
         Debug.Log("게임 오버");
     }
 
+    void PlayerScale()
+    {
+        transform.localScale = new Vector3(transform.localScale.x - 100f * scaleSpeed * Time.deltaTime,
+               transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
+    }
 }
