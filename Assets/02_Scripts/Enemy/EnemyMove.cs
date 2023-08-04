@@ -25,21 +25,13 @@ public class EnemyMove : MonoBehaviour
         {
             Move();
         }
-        else
+        else 
         {
-            RandomMove();
+            InvokeRepeating("RandomMove", 0, 10);
         };
-
-      
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("BULLET"))
-        {
-            Destroy(gameObject);
-        }
-    }
+    
 
     void Move()
     {
@@ -49,16 +41,17 @@ public class EnemyMove : MonoBehaviour
 
     void Shoot()
     {
-       GameObject enemyBullet = Instantiate(bulletPrefab);
-       enemyBullet.transform.position = transform.position;
+        GameObject enemyBullet = Instantiate(bulletPrefab);
+        enemyBullet.transform.position = transform.position;
 
-        Vector2 dir = target.gameObject.transform.position - transform.position;
-        dir.Normalize();
-        enemyBullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+        Vector2 bulletDir = target.gameObject.transform.position - transform.position;
+        bulletDir.Normalize();
+        enemyBullet.GetComponent<Rigidbody2D>().AddForce(bulletDir * bulletSpeed, ForceMode2D.Impulse);
     }
 
     void RandomMove()
     {
+        Debug.Log("½ÇÇà?");
         float randomX = Random.Range(-25f, 25f);
         float randomY = Random.Range(-17f, 17f);
 
@@ -70,5 +63,4 @@ public class EnemyMove : MonoBehaviour
     {
         target = owner;
     }
-
 }

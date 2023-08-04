@@ -12,8 +12,8 @@ public class PlayerMove : MonoBehaviour
     //public int C;
 
     [Header("총알 관련")]
-    public GameObject bulletPrefab; 
-    public Transform bulletSpawnPoint; 
+    public GameObject bulletPrefab;
+    public Transform bulletSpawnPoint;
     public float bulletSpeed = 10f;
 
     [Header("이동 관련")]
@@ -48,7 +48,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine("PlayerScale", 0.5f);
+        StartCoroutine("PlayerScale", 1f);
     }
 
     void Update()
@@ -62,7 +62,7 @@ public class PlayerMove : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
     }
-   
+
     void Move()
     {
         // 키보드 입력 받기
@@ -82,9 +82,15 @@ public class PlayerMove : MonoBehaviour
 
     void Shoot()
     {
-        Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - cam.transform.position;
+
+       // Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - cam.transform.position;
+        Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - gameObject.transform.position;
+        dir.z = 0;
         dir.Normalize();
 
+        Debug.Log(dir);
+
+        //총알 발사
         GameObject bullet = Instantiate(bulletPrefab);
         bullet.GetComponent<Bullet>().Init(this);
         bullet.transform.position = bulletSpawnPoint.position;
@@ -100,19 +106,18 @@ public class PlayerMove : MonoBehaviour
 
     IEnumerator PlayerScale(float delayTime)
     {
-        if(transform.localScale.x < 0 && transform.localScale.y < 0)
+        if (transform.localScale.x < 0 && transform.localScale.y < 0)
         {
-          //  PlayerDie();
+            //  PlayerDie();
             yield return 0;
         }
         else
         {
+           // PlayerScale();
 
-            PlayerScale();
+            yield return new WaitForSeconds(delayTime);
 
-             yield return new WaitForSeconds(delayTime);
-
-            StartCoroutine("PlayerScale", 0.5f);
+            StartCoroutine("PlayerScale", 1f);
         }
     }
 
@@ -126,5 +131,17 @@ public class PlayerMove : MonoBehaviour
     {
         transform.localScale = new Vector3(transform.localScale.x - 100f * scaleSpeed * Time.deltaTime,
                transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("ENEMY"))
+        {
+    //        Debug.Log("적에 닿았다!");
+        }
+        if (collision.CompareTag("ENEMYBULLET"))
+        {
+      //      Debug.Log("적 총알에 닿았다!");
+        }
     }
 }
