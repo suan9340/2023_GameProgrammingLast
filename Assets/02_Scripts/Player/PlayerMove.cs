@@ -36,8 +36,14 @@ public class PlayerMove : MonoBehaviour
             radius = value;
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
 
-            //시네머신 카메라 
-            playerVcam.m_Lens.OrthographicSize = radius * 3;
+            Debug.Log(radius);
+
+            if (radius < 3.5f)
+            {
+                //시네머신 카메라 
+                playerVcam.m_Lens.OrthographicSize = radius * 3;
+            }
+            
         }
     }
 
@@ -82,13 +88,9 @@ public class PlayerMove : MonoBehaviour
 
     void Shoot()
     {
-
-       // Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - cam.transform.position;
         Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - gameObject.transform.position;
         dir.z = 0;
         dir.Normalize();
-
-        Debug.Log(dir);
 
         //총알 발사
         GameObject bullet = Instantiate(bulletPrefab);
@@ -113,7 +115,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-           // PlayerScale();
+            PlayerScale();
 
             yield return new WaitForSeconds(delayTime);
 
@@ -133,15 +135,17 @@ public class PlayerMove : MonoBehaviour
                transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.CompareTag("ENEMY"))
+        if (collision.gameObject.CompareTag("ENEMY"))
         {
-    //        Debug.Log("적에 닿았다!");
+            PlayerDie();
         }
-        if (collision.CompareTag("ENEMYBULLET"))
+        if (collision.gameObject.CompareTag("ENEMYBULLET"))
         {
-      //      Debug.Log("적 총알에 닿았다!");
+            Debug.Log("플레이어 맞음");
+            Radius -= 0.3f;
         }
     }
+ 
 }
