@@ -23,7 +23,7 @@ public class SpawnManager : MonoBehaviour
         if (enableSpawn)
         {
             GameObject enemy = (GameObject)Instantiate(Enemy, new Vector2(randomX, randomY), Quaternion.identity);
-            enemy.GetComponent<EnemyMove>().EnemyInit(PlayerMoveScript);
+            enemy.GetComponent<EnemyFSM>().EnemyInit(PlayerMoveScript);
         }
     }
    

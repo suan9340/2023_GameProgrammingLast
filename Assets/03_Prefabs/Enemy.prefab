@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4529018525944182224}
   - component: {fileID: 2096943135382757912}
-  - component: {fileID: -2129486863629804333}
   - component: {fileID: -951994045014685919}
   - component: {fileID: 5936601198760607854}
-  m_Layer: 0
+  - component: {fileID: 8387427602722179035}
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: ENEMY
   m_Icon: {fileID: 0}
@@ -87,21 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-2129486863629804333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5335203539716886375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2b28b011baf11d41a17591082a9b83b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 382435890997194421, guid: 8ef30417b12f9844db1019a8321e973d, type: 3}
-  bulletSpawnPoint: {fileID: 4529018525944182224}
-  bulletSpeed: 10
 --- !u!58 &-951994045014685919
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -112,7 +97,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -139,3 +124,18 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8387427602722179035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5335203539716886375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5375f74a3b784264c9c6a5f1abcfb5c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 382435890997194421, guid: 8ef30417b12f9844db1019a8321e973d, type: 3}
+  bulletSpawnPoint: {fileID: 4529018525944182224}
+  bulletSpeed: 5

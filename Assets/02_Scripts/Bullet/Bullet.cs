@@ -9,13 +9,15 @@ public class Bullet : MonoBehaviour
 
     private PlayerMove player;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("BORDER"))
+
+
+private void OnCollisionEnter2D(Collision2D collision)
+{
+        if (collision.gameObject. CompareTag("BORDER"))
         {
             Destroy(gameObject);
         }
-        else if (collision.CompareTag("ENEMY"))
+        else if (collision.gameObject.CompareTag("ENEMY"))
         {
             isEnemy = true;
             Destroy(gameObject);
