@@ -32,6 +32,9 @@ public class PlayerMove : MonoBehaviour
     [Header("방향")]
     [SerializeField] private Transform directionObject;
 
+    [Header("UI 매니저")]
+    public UIManager uiManager;
+
     public float Radius
     {
         get { return radius; }
@@ -40,12 +43,11 @@ public class PlayerMove : MonoBehaviour
             radius = value;
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
 
-            if (2f < radius && radius < 3.5f)
+            if (2f < radius && radius < 4f)
             {
                 //시네머신 카메라 
                 playerVcam.m_Lens.OrthographicSize = radius * 3;
             }
-            
         }
     }
 
@@ -69,8 +71,20 @@ public class PlayerMove : MonoBehaviour
         }
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
-
         RotateDirectionObject();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("ENEMY"))
+        {
+            PlayerDie();
+        }
+        if (collision.gameObject.CompareTag("ENEMYBULLET") && transform.localScale.x > 0
+           && transform.localScale.y > 0)
+        {
+            Radius -= 0.3f;
+        }
     }
 
     private void RotateDirectionObject()
@@ -78,6 +92,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 mousePos = cam.ScreenToWorldPoint
             (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         mousePos.z = 0;
+
         Vector3 dir = (mousePos - transform.position).normalized;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -129,7 +144,9 @@ public class PlayerMove : MonoBehaviour
 
     public void PlayerDie()
     {
+        uiManager.GetComponent<UIManager>().GameOverPanel();
         gameObject.SetActive(false);
+        Time.timeScale = 0;
     }
 
     void PlayerScale()
@@ -137,17 +154,4 @@ public class PlayerMove : MonoBehaviour
         transform.localScale = new Vector3(transform.localScale.x - 100f * scaleSpeed * Time.deltaTime,
                transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("ENEMY"))
-        {
-            PlayerDie();
-        }
-        if (collision.gameObject.CompareTag("ENEMYBULLET"))
-        {
-            Radius -= 0.3f;
-        }
-    }
- 
 }
