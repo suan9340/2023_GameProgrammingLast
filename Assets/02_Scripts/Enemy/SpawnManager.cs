@@ -16,9 +16,9 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemy()
     {
+
         float randomX = Random.Range(-25f, 25f); 
         float randomY = Random.Range(-17f, 17f);
-
 
         if (enableSpawn)
         {

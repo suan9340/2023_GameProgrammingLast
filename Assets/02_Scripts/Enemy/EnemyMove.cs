@@ -31,8 +31,6 @@ public class EnemyMove : MonoBehaviour
         };
     }
 
-    
-
     void Move()
     {
         transform.position = Vector2.MoveTowards(transform.position, 

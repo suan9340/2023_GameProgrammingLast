@@ -38,7 +38,7 @@ public class PlayerMove : MonoBehaviour
 
             Debug.Log(radius);
 
-            if (radius < 3.5f)
+            if (1f < radius && radius < 3.5f)
             {
                 //시네머신 카메라 
                 playerVcam.m_Lens.OrthographicSize = radius * 3;
@@ -84,6 +84,11 @@ public class PlayerMove : MonoBehaviour
         Vector2 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector2 dirVec = mousePos - (Vector2)transform.position;
         transform.up = dirVec.normalized;
+
+        if (transform.localScale.x <= 0 && transform.localScale.y <= 0)
+        {
+            PlayerDie();     
+        }
     }
 
     void Shoot()
@@ -106,24 +111,7 @@ public class PlayerMove : MonoBehaviour
         Radius += 0.5f;
     }
 
-    IEnumerator PlayerScale(float delayTime)
-    {
-        if (transform.localScale.x < 0 && transform.localScale.y < 0)
-        {
-            //  PlayerDie();
-            yield return 0;
-        }
-        else
-        {
-            PlayerScale();
-
-            yield return new WaitForSeconds(delayTime);
-
-            StartCoroutine("PlayerScale", 1f);
-        }
-    }
-
-    void PlayerDie()
+    public void PlayerDie()
     {
         gameObject.SetActive(false);
         Debug.Log("게임 오버");
