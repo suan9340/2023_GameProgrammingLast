@@ -17,7 +17,7 @@ public class SoftBody : MonoBehaviour
         UpdateVeticies();
     }
 
-    private void Start()
+    private void Update()
     {
         UpdateVeticies();
     }
@@ -40,6 +40,14 @@ public class SoftBody : MonoBehaviour
                 Debug.Log("Spline points are too close to each other.. recalculate");
                 spriteShape.spline.SetPosition(i, (_vertex - _towardsCenter * (_colliderRadius + splineOffset)));
             }
+
+            Vector2 _lt = spriteShape.spline.GetLeftTangent(i);
+
+            Vector2 _newRt = Vector2.Perpendicular(_towardsCenter) * _lt.magnitude;
+            Vector2 _newLt = Vector2.zero - (_newRt);
+
+            spriteShape.spline.SetRightTangent(i, _newRt);
+            spriteShape.spline.SetLeftTangent(i, _newLt);
         }
     }
 }
