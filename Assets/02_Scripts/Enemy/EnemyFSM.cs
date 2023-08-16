@@ -18,6 +18,13 @@ public class EnemyFSM : MonoBehaviour
     public Transform bulletSpawnPoint;
     public float bulletSpeed = 2f;
 
+    enum State
+    {
+        Idle,
+        Chase,
+        Die,
+    }
+
     void ChangeState(State state)
     {
         stateTimer = 0;
@@ -105,13 +112,6 @@ public class EnemyFSM : MonoBehaviour
         Vector2 bulletDir = player.gameObject.transform.position - transform.position;
         bulletDir.Normalize();
         enemyBullet.GetComponent<Rigidbody2D>().AddForce(bulletDir * bulletSpeed, ForceMode2D.Impulse);
-    }
-
-    enum State
-    {
-        Idle,
-        Chase,
-        Die,
     }
 
     public void EnemyInit(PlayerMove owner)

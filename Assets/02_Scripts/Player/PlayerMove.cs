@@ -1,5 +1,6 @@
 using Cinemachine;
 using DG.Tweening;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -27,6 +28,9 @@ public class PlayerMove : MonoBehaviour
     [Header("크기 관련")]
     float radius = 1f;
     float scaleSpeed = 0.1f;
+
+    [Header("방향")]
+    [SerializeField] private Transform directionObject;
 
     public float Radius
     {
@@ -65,6 +69,20 @@ public class PlayerMove : MonoBehaviour
         }
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        RotateDirectionObject();
+    }
+
+    private void RotateDirectionObject()
+    {
+        Vector3 mousePos = cam.ScreenToWorldPoint
+            (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+        mousePos.z = 0;
+        Vector3 dir = (mousePos - transform.position).normalized;
+
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        directionObject.localEulerAngles = new Vector3(0, 0, angle);
     }
 
     void Move()
