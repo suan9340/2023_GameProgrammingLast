@@ -36,9 +36,7 @@ public class PlayerMove : MonoBehaviour
             radius = value;
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
 
-            Debug.Log(radius);
-
-            if (1f < radius && radius < 3.5f)
+            if (2f < radius && radius < 3.5f)
             {
                 //시네머신 카메라 
                 playerVcam.m_Lens.OrthographicSize = radius * 3;
@@ -114,7 +112,6 @@ public class PlayerMove : MonoBehaviour
     public void PlayerDie()
     {
         gameObject.SetActive(false);
-        Debug.Log("게임 오버");
     }
 
     void PlayerScale()
@@ -131,7 +128,6 @@ public class PlayerMove : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("ENEMYBULLET"))
         {
-            Debug.Log("플레이어 맞음");
             Radius -= 0.3f;
         }
     }

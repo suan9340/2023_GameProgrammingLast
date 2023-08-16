@@ -511,9 +511,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33c04200eb516ac4b9fb108e81a0175e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 5335203539716886375, guid: 3097988335728554eb7f2fb9936b0e50, type: 3}
+  playerMoveScript: {fileID: 550685192}
   enableSpawn: 1
-  Enemy: {fileID: 5335203539716886375, guid: 3097988335728554eb7f2fb9936b0e50, type: 3}
-  PlayerMoveScript: {fileID: 550685192}
 --- !u!4 &603525009
 Transform:
   m_ObjectHideFlags: 0
