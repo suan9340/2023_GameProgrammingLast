@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private PlayerMove player;
+
     public float moveSpeed = 10.0f;
     public bool isEnemy = false;
-
-    private PlayerMove player;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

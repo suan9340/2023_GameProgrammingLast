@@ -5,7 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
+    public GameObject gameStartPanel;
     public GameObject gameOverPanel;
+
+    void Awake()
+    {
+        Time.timeScale = 0;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Time.timeScale = 1;
+            gameStartPanel.SetActive(false);
+        }
+    }
+
 
     public void GameOverPanel()
     {
@@ -15,7 +31,7 @@ public class UIManager : MonoBehaviour
     public void ReStart()
     {
         Time.timeScale = 1;
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 
 }
