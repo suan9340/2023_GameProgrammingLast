@@ -35,6 +35,15 @@ public class PlayerMove : MonoBehaviour
     [Header("UI 매니저")]
     public UIManager uiManager;
 
+    public enum Level
+    {
+        Level_1,
+        Level_2,
+        Level_3,
+        Level_4,
+        Level_5,
+    }
+
     public float Radius
     {
         get { return radius; }
@@ -61,13 +70,23 @@ public class PlayerMove : MonoBehaviour
         StartCoroutine("PlayerScale", 1f);
     }
 
+    public float speed = 1f;
+    public Transform bulletSpawnPoint2;
+
     void Update()
     {
+        if (uiManager.GetComponent<UIManager>().isGameStart == false)
+        {
+            return;
+        }
+
         Move();
 
         if (Input.GetMouseButtonDown(0))
         {
-            Shoot();
+            // 오브젝트풀 에서 빌려오기
+            var bulletGo = ObjectPoolManager.instance.Pool.Get();
+            Shoot(bulletGo);
         }
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -118,21 +137,21 @@ public class PlayerMove : MonoBehaviour
 
         if (transform.localScale.x <= 0 && transform.localScale.y <= 0)
         {
-            PlayerDie();     
+            PlayerDie();
         }
     }
 
-    void Shoot()
+    void Shoot(GameObject _obj)
     {
         Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - gameObject.transform.position;
         dir.z = 0;
         dir.Normalize();
 
-        //총알 발사
-        GameObject bullet = Instantiate(bulletPrefab);
-        bullet.GetComponent<Bullet>().Init(this);
-        bullet.transform.position = bulletSpawnPoint.position;
-        bullet.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
+        //총알 발사는 풀링으로 구현함!
+        //  GameObject bullet = Instantiate(bulletPrefab);
+        _obj.GetComponent<Bullet>().Init(this);
+        _obj.transform.position = bulletSpawnPoint.position;
+        _obj.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
 
         PlayerScale();
     }

@@ -33,7 +33,7 @@ public class EnemyFSM : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating("Shoot", 0, 1);
+        InvokeRepeating("Shoot", 0, 2);
     }
 
     private void Update()
@@ -71,7 +71,6 @@ public class EnemyFSM : MonoBehaviour
 
     void IdleState()
     {
-       // Debug.Log("Idle");
 
         float dist = Vector3.Distance(transform.position, player.gameObject.transform.position);
         
@@ -91,7 +90,6 @@ public class EnemyFSM : MonoBehaviour
 
     void ChaseState()
     {
-      //  Debug.Log("Chase");
 
         float dist = Vector3.Distance(transform.position, player.gameObject.transform.position);
           Vector3 dir = (player.gameObject.transform.position - transform.position).normalized;

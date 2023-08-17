@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
@@ -9,18 +10,22 @@ public class Bullet : MonoBehaviour
     public float moveSpeed = 10.0f;
     public bool isEnemy = false;
 
+    public IObjectPool<GameObject> Pool { get; set; }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("BORDER"))
         {
-            Destroy(gameObject);
+            //  Destroy(gameObject);
+            Pool.Release(this.gameObject);
         }
         else if (collision.gameObject.CompareTag("ENEMY"))
         {
             isEnemy = true;
-            Destroy(gameObject);
+            Pool.Release(this.gameObject);
+            //  Destroy(gameObject);
 
-            player.PlayerScaleControll();
+             player.PlayerScaleControll();
         }
     }
 
@@ -28,4 +33,6 @@ public class Bullet : MonoBehaviour
     {
         player = owner;
     }
+
+
 }
