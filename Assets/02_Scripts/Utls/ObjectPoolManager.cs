@@ -3,12 +3,15 @@ using UnityEngine.Pool;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    public static ObjectPoolManager instance;
+   
 
     public int defaultCapacity = 10;
     public int maxPoolSize = 15;
+
     public GameObject bulletPrefab;
     public GameObject pooling;
+
+    public static ObjectPoolManager instance;
 
     public IObjectPool<GameObject> Pool { get; private set; }
 
@@ -16,7 +19,6 @@ public class ObjectPoolManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
-
         else
             Destroy(this.gameObject);
         Init();

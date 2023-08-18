@@ -16,15 +16,12 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BORDER"))
         {
-            //  Destroy(gameObject);
             Pool.Release(this.gameObject);
         }
         else if (collision.gameObject.CompareTag("ENEMY"))
         {
             isEnemy = true;
             Pool.Release(this.gameObject);
-            //  Destroy(gameObject);
-
              player.PlayerScaleControll();
         }
     }

@@ -21,18 +21,17 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody2D playerRigidbody;
     public float moveSpeed;
 
+    [SerializeField] private Transform directionObject;
+
     [Header("카메라 관련")]
     public CinemachineVirtualCamera playerVcam;
     public Camera cam;
 
     [Header("크기 관련")]
     float radius = 1f;
-    float scaleSpeed = 0.1f;
+    float sizeSpeed = 1f;
 
-    [Header("방향")]
-    [SerializeField] private Transform directionObject;
-
-    [Header("UI 매니저")]
+    [Header("매니저 관련")]
     public UIManager uiManager;
 
     public enum Level
@@ -54,7 +53,6 @@ public class PlayerMove : MonoBehaviour
 
             if (2f < radius && radius < 4f)
             {
-                //시네머신 카메라 
                 playerVcam.m_Lens.OrthographicSize = radius * 3;
             }
         }
@@ -75,6 +73,10 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+
+        float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
+        sizeSpeed = Mathf.Lerp(1, 5, myLerp);
+
         if (uiManager.GetComponent<UIManager>().isGameStart == false)
         {
             return;
@@ -84,7 +86,6 @@ public class PlayerMove : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            // 오브젝트풀 에서 빌려오기
             var bulletGo = ObjectPoolManager.instance.Pool.Get();
             Shoot(bulletGo);
         }
@@ -102,35 +103,19 @@ public class PlayerMove : MonoBehaviour
         if (collision.gameObject.CompareTag("ENEMYBULLET") && transform.localScale.x > 0
            && transform.localScale.y > 0)
         {
-            Radius -= 0.3f;
+            Radius -= 0.5f;
         }
-    }
-
-    private void RotateDirectionObject()
-    {
-        Vector3 mousePos = cam.ScreenToWorldPoint
-            (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
-        mousePos.z = 0;
-
-        Vector3 dir = (mousePos - transform.position).normalized;
-
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        directionObject.localEulerAngles = new Vector3(0, 0, angle);
     }
 
     void Move()
     {
-        // 키보드 입력 받기
         Vector2 moveInput;
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput.Normalize();
 
-        // 플레이어 이동
-        playerRigidbody.velocity = moveInput * moveSpeed;
+        playerRigidbody.velocity = moveInput * sizeSpeed;
 
-        // 마우스 위치 방향을 보기
         Vector2 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector2 dirVec = mousePos - (Vector2)transform.position;
         transform.up = dirVec.normalized;
@@ -147,8 +132,6 @@ public class PlayerMove : MonoBehaviour
         dir.z = 0;
         dir.Normalize();
 
-        //총알 발사는 풀링으로 구현함!
-        //  GameObject bullet = Instantiate(bulletPrefab);
         _obj.GetComponent<Bullet>().Init(this);
         _obj.transform.position = bulletSpawnPoint.position;
         _obj.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
@@ -156,9 +139,30 @@ public class PlayerMove : MonoBehaviour
         PlayerScale();
     }
 
+    private void RotateDirectionObject()
+    {
+        Vector3 mousePos = cam.ScreenToWorldPoint
+            (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+        mousePos.z = 0;
+
+        Vector3 dir = (mousePos - transform.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        directionObject.localEulerAngles = new Vector3(0, 0, angle);
+    }
+
+ 
     public void PlayerScaleControll()
     {
+        // 적 맞혔을때.
         Radius += 0.5f;
+    }
+
+    void PlayerScale()
+    {
+        // 총알 발사했을때.
+        //transform.localScale = new Vector3(transform.localScale.x - 100f * moveSpeed * Time.deltaTime,
+        //    transform.localScale.y - 100f * moveSpeed * Time.deltaTime, 0);
+        Radius -= 0.1f;
     }
 
     public void PlayerDie()
@@ -166,11 +170,5 @@ public class PlayerMove : MonoBehaviour
         uiManager.GetComponent<UIManager>().GameOverPanel();
         gameObject.SetActive(false);
         Time.timeScale = 0;
-    }
-
-    void PlayerScale()
-    {
-        transform.localScale = new Vector3(transform.localScale.x - 100f * scaleSpeed * Time.deltaTime,
-               transform.localScale.y - 100f * scaleSpeed * Time.deltaTime, 0);
     }
 }
