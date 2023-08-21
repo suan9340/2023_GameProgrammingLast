@@ -1,27 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
+    private PlayerMove player;
+
     public float moveSpeed = 10.0f;
     public bool isEnemy = false;
 
-    private PlayerMove player;
+    public IObjectPool<GameObject> Pool { get; set; }
 
-
-
-private void OnCollisionEnter2D(Collision2D collision)
-{
-        if (collision.gameObject. CompareTag("BORDER"))
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("BORDER"))
         {
-            Destroy(gameObject);
+            //Pool.Release(this.gameObject);
+            BulletPoolManager.instance.PoolReturn(this);
         }
         else if (collision.gameObject.CompareTag("ENEMY"))
         {
             isEnemy = true;
-            Destroy(gameObject);
-
+            // Pool.Release(this.gameObject);
+            BulletPoolManager.instance.PoolReturn(this);
             player.PlayerScaleControll();
         }
     }

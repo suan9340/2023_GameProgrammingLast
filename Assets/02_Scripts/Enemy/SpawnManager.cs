@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public bool enableSpawn = false;
+    public GameObject enemyPrefab;
+    public PlayerMove playerMoveScript;
 
-    public GameObject Enemy;
-    public PlayerMove PlayerMoveScript;
+    public bool enableSpawn = false;
+    float safeDistance = 2f;
 
     void Start()
     {
@@ -16,15 +17,28 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnEnemy()
     {
-        float randomX = Random.Range(-25f, 25f); 
+        float randomX = Random.Range(-25f, 25f);
         float randomY = Random.Range(-17f, 17f);
 
+        Vector3 playerPos = playerMoveScript.transform.position;
+        Vector3 enemyPos = new Vector2(randomX, randomY);
 
-        if (enableSpawn)
+        // 적이 나오는 위치 = 플레이어 위치 + 방향 * 안전거리 * 랜덤(1.0f, 1.5f);
+      
+        // 아래 if문 작동 안됨. 고칠 것!
+        if (Vector3.Distance(playerPos, enemyPos) < safeDistance && enableSpawn)
         {
-            GameObject enemy = (GameObject)Instantiate(Enemy, new Vector2(randomX, randomY), Quaternion.identity);
-            enemy.GetComponent<EnemyFSM>().EnemyInit(PlayerMoveScript);
+            Vector3 dir = playerPos - enemyPos;
+            dir.Normalize();
+            enemyPos = playerPos + dir * safeDistance * Random.Range(1f, 1.5f);
+            GameObject enemy = (GameObject)Instantiate(enemyPrefab, enemyPos, Quaternion.identity);
+            enemy.GetComponent<EnemyFSM>().EnemyInit(playerMoveScript);
         }
+        else
+        {
+            GameObject enemy = (GameObject)Instantiate(enemyPrefab, enemyPos, Quaternion.identity);
+            enemy.GetComponent<EnemyFSM>().EnemyInit(playerMoveScript);
+        }
+
     }
-   
 }
