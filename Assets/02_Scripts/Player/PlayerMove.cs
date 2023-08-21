@@ -30,6 +30,7 @@ public class PlayerMove : MonoBehaviour
     [Header("크기 관련")]
     float radius = 1f;
     float sizeSpeed = 1f;
+    bool isScaleChange = false;
 
     [Header("매니저 관련")]
     public UIManager uiManager;
@@ -48,6 +49,8 @@ public class PlayerMove : MonoBehaviour
         get { return radius; }
         set
         {
+            isScaleChange = true;
+
             radius = value;
             transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
 
@@ -55,6 +58,8 @@ public class PlayerMove : MonoBehaviour
             {
                 playerVcam.m_Lens.OrthographicSize = radius * 3;
             }
+
+            isScaleChange = false;
         }
     }
 
@@ -63,34 +68,30 @@ public class PlayerMove : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
     }
 
-    private void Start()
-    {
-    }
-
-    public float speed = 1f;
-    public Transform bulletSpawnPoint2;
-
     void Update()
     {
-        radius -= Time.deltaTime*0.05f;
-        transform.localScale = Vector2.one * radius;
-
-        float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
-        sizeSpeed = Mathf.Lerp(1, 5, myLerp);
-
         if (uiManager.GetComponent<UIManager>().isGameStart == false)
         {
             return;
         }
 
+        if (!isScaleChange)
+        {
+            // 서서히 줄어드는 것.
+            radius -= Time.deltaTime * 0.05f;
+            transform.localScale = Vector2.one * radius;
+        }
+
+        // 크기에 따라 속도가 달라지는 것.
+        float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
+        sizeSpeed = Mathf.Lerp(1, 5, myLerp);
+
         Move();
 
         if (Input.GetMouseButtonDown(0))
         {
-            //var bulletGo = ObjectPoolManager.instance.Pool.Get();
-
-           Bullet bulletGo = BulletPoolManager.instance.BulletShoot();
-           Shoot(bulletGo);
+            Bullet bulletGo = BulletPoolManager.instance.BulletShoot();
+            Shoot(bulletGo);
         }
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -106,6 +107,7 @@ public class PlayerMove : MonoBehaviour
         if (collision.gameObject.CompareTag("ENEMYBULLET") && transform.localScale.x > 0
            && transform.localScale.y > 0)
         {
+            isScaleChange = true;
             Radius -= 0.5f;
         }
     }
@@ -155,16 +157,16 @@ public class PlayerMove : MonoBehaviour
 
     public void PlayerScaleControll()
     {
+       
         // 적 맞혔을때.
         Radius += 0.5f;
     }
 
     void PlayerScale()
     {
+     
         // 총알 발사했을때.
-        transform.localScale = new Vector3(transform.localScale.x - 100f * moveSpeed * Time.deltaTime,
-            transform.localScale.y - 100f * moveSpeed * Time.deltaTime, 0);
-       // Radius -= 0.1f;
+        Radius -= 0.1f;
     }
 
     public void PlayerDie()
