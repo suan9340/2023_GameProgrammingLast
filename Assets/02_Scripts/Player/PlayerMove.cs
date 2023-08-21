@@ -65,7 +65,6 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine("PlayerScale", 1f);
     }
 
     public float speed = 1f;
@@ -73,6 +72,8 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+        radius -= Time.deltaTime*0.05f;
+        transform.localScale = Vector2.one * radius;
 
         float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
         sizeSpeed = Mathf.Lerp(1, 5, myLerp);
@@ -86,8 +87,10 @@ public class PlayerMove : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            var bulletGo = ObjectPoolManager.instance.Pool.Get();
-            Shoot(bulletGo);
+            //var bulletGo = ObjectPoolManager.instance.Pool.Get();
+
+           Bullet bulletGo = BulletPoolManager.instance.BulletShoot();
+           Shoot(bulletGo);
         }
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -126,7 +129,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    void Shoot(GameObject _obj)
+    void Shoot(Bullet _obj)
     {
         Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - gameObject.transform.position;
         dir.z = 0;
@@ -150,7 +153,6 @@ public class PlayerMove : MonoBehaviour
         directionObject.localEulerAngles = new Vector3(0, 0, angle);
     }
 
- 
     public void PlayerScaleControll()
     {
         // 적 맞혔을때.
@@ -160,9 +162,9 @@ public class PlayerMove : MonoBehaviour
     void PlayerScale()
     {
         // 총알 발사했을때.
-        //transform.localScale = new Vector3(transform.localScale.x - 100f * moveSpeed * Time.deltaTime,
-        //    transform.localScale.y - 100f * moveSpeed * Time.deltaTime, 0);
-        Radius -= 0.1f;
+        transform.localScale = new Vector3(transform.localScale.x - 100f * moveSpeed * Time.deltaTime,
+            transform.localScale.y - 100f * moveSpeed * Time.deltaTime, 0);
+       // Radius -= 0.1f;
     }
 
     public void PlayerDie()

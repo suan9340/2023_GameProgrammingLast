@@ -16,13 +16,15 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BORDER"))
         {
-            Pool.Release(this.gameObject);
+            //Pool.Release(this.gameObject);
+            BulletPoolManager.instance.PoolReturn(this);
         }
         else if (collision.gameObject.CompareTag("ENEMY"))
         {
             isEnemy = true;
-            Pool.Release(this.gameObject);
-             player.PlayerScaleControll();
+            // Pool.Release(this.gameObject);
+            BulletPoolManager.instance.PoolReturn(this);
+            player.PlayerScaleControll();
         }
     }
 
@@ -30,6 +32,4 @@ public class Bullet : MonoBehaviour
     {
         player = owner;
     }
-
-
 }
