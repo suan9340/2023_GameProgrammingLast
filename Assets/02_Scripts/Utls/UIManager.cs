@@ -32,8 +32,8 @@ public class UIManager : MonoBehaviour
 
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(gameStartPanel.transform.DOScale(1.1f, 0.1f));
-        seq.Append(gameStartPanel.transform.DOScale(0f, 0.2f));
+        seq.Append(gameStartPanel.transform.DOScale(1.1f, 0.3f));
+        seq.Append(gameStartPanel.transform.DOScale(0f, 0.1f));
 
         seq.Play().OnComplete(() =>
         {

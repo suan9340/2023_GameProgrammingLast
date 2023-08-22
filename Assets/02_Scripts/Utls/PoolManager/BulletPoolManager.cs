@@ -20,7 +20,7 @@ public class BulletPoolManager : MonoBehaviour
     {
         for (int i = 0; i < 15; i++)
         {
-;            Bullet obj = Instantiate(bulletPrefab, transform);
+            Bullet obj = Instantiate(bulletPrefab, transform);
 
             obj.gameObject.SetActive(false);
 

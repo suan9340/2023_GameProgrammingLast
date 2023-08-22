@@ -10,6 +10,11 @@ public class Bullet : MonoBehaviour
     public float moveSpeed = 10.0f;
     public bool isEnemy = false;
 
+    private void Awake()
+    {
+        
+    }
+
     public IObjectPool<GameObject> Pool { get; set; }
 
     private void OnCollisionEnter2D(Collision2D collision)
