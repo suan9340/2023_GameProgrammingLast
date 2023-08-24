@@ -50,16 +50,14 @@ public class PlayerMove : MonoBehaviour
         set
         {
             isScaleChange = true;
-
             radius = value;
-            transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic);
+            transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic).OnComplete(() => isScaleChange = false);
 
             if (2f < radius && radius < 4f)
             {
                 playerVcam.m_Lens.OrthographicSize = radius * 3;
             }
 
-            isScaleChange = false;
         }
     }
 
@@ -75,10 +73,11 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if (!isScaleChange)
+        if(!isScaleChange)
         {
+
             // 서서히 줄어드는 것.
-            radius -= Time.deltaTime * 0.05f;
+            radius -= Time.deltaTime * 0.02f;
             transform.localScale = Vector2.one * radius;
         }
 
@@ -86,7 +85,7 @@ public class PlayerMove : MonoBehaviour
         float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
         sizeSpeed = Mathf.Lerp(1, 5, myLerp);
 
-        Move();
+        
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -96,6 +95,11 @@ public class PlayerMove : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, 0);
         RotateDirectionObject();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -150,21 +154,22 @@ public class PlayerMove : MonoBehaviour
             (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         mousePos.z = 0;
 
+     
         Vector3 dir = (mousePos - transform.position).normalized;
+
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        directionObject.localEulerAngles = new Vector3(0, 0, angle);
+      // directionObject.localEulerAngles = new Vector3(0, 0, angle);
+        transform.localEulerAngles = new Vector3(0, 0, angle);
     }
 
     public void PlayerScaleControll()
     {
-       
         // 적 맞혔을때.
         Radius += 0.5f;
     }
 
     void PlayerScale()
     {
-     
         // 총알 발사했을때.
         Radius -= 0.1f;
     }
