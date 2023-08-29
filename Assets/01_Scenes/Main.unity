@@ -138,7 +138,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7472767
 Transform:
   m_ObjectHideFlags: 0
@@ -923,7 +923,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 21300000, guid: 86df928d32ac6954f84780f301393dd9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 51378a547f0ab0d43ba0d1d766f1beaf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -966,7 +966,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 19.2, y: 10.8}
+    oldSize: {x: 50.00721, y: 33.33}
     newSize: {x: 50, y: 35}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
@@ -2448,7 +2448,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 1696203175, guid: e3204aa2a9791b8499453d03b764a391, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 10c647ea44d2f7a46961a8d3bd09ada6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

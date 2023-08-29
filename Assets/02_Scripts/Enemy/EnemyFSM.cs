@@ -50,7 +50,6 @@ public class EnemyFSM : MonoBehaviour
                 ChaseState();
                 break;
             case State.Die:
-              
                 break;
         }
     }
