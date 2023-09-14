@@ -75,7 +75,6 @@ public class PlayerMove : MonoBehaviour
 
         if(!isScaleChange)
         {
-
             // 서서히 줄어드는 것.
             radius -= Time.deltaTime * 0.02f;
             transform.localScale = Vector2.one * radius;

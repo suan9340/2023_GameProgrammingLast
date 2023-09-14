@@ -38,11 +38,9 @@ public class EnemyFSM : MonoBehaviour
 
     private void Update()
     {
-
         stateTimer += Time.deltaTime;
         switch (curState)
         {
-            
             case State.Idle:
                 IdleState();
                 break;
