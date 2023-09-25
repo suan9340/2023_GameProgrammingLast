@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-    public float moveSpeed = 10.0f;
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.CompareTag("BORDER"))
-        {
-            Destroy(gameObject);
-        }
-        else if (collision.CompareTag("Player"))
+       // if (gameObject.CompareTag("BORDER"))
         {
             Destroy(gameObject);
         }
