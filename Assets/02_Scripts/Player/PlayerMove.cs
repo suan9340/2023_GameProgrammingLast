@@ -103,12 +103,8 @@ public class PlayerMove : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("ENEMY"))
-        {
-            PlayerDie();
-        }
 
-        if (collision.gameObject.CompareTag("ENEMYBULLET"))
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMYBULLET))
         {
             CollisionWithEnemyBullet();
         }
@@ -143,7 +139,7 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    void Shoot(Bullet _obj)
+    private void Shoot(Bullet _obj)
     {
         Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - gameObject.transform.position;
         dir.z = 0;

@@ -13,12 +13,12 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("BORDER"))
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
         {
             BulletPoolManager.instance.PoolReturn(this);
         }
 
-        if (collision.gameObject.CompareTag("ENEMY"))
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMY))
         {
             BulletPoolManager.instance.PoolReturn(this);
         }

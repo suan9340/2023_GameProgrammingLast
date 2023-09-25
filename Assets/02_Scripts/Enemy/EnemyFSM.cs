@@ -56,11 +56,11 @@ public class EnemyFSM : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("BULLET"))
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_BULLET))
         {
             CollisionWithBullet(5f);
         }
-        if (collision.gameObject.CompareTag("BORDER"))
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
         {
             Vector3 reflectVector = Vector3.Reflect(idleMoveDir, collision.contacts[0].normal);
             idleMoveDir = reflectVector;
@@ -75,7 +75,7 @@ public class EnemyFSM : MonoBehaviour
         {
             Destroy(gameObject);
             ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.enemyDie, gameObject.transform.position);
-            
+
         }
     }
 
