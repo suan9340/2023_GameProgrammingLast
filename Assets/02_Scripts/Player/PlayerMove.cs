@@ -75,7 +75,6 @@ public class PlayerMove : MonoBehaviour
 
         if(!isScaleChange)
         {
-
             // 서서히 줄어드는 것.
             radius -= Time.deltaTime * 0.02f;
             transform.localScale = Vector2.one * radius;
@@ -158,8 +157,8 @@ public class PlayerMove : MonoBehaviour
         Vector3 dir = (mousePos - transform.position).normalized;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-      // directionObject.localEulerAngles = new Vector3(0, 0, angle);
-        transform.localEulerAngles = new Vector3(0, 0, angle);
+       directionObject.localEulerAngles = new Vector3(0, 0, angle);
+      //  transform.localEulerAngles = new Vector3(0, 0, angle);
     }
 
     public void PlayerScaleControll()

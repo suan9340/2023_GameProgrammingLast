@@ -45,7 +45,6 @@ public class EnemyPoolManager : MonoBehaviour
 
         // 적이 나오는 위치 = 플레이어 위치 + 방향 * 안전거리 * 랜덤(1.0f, 1.5f);
 
-        // 아래 if문 작동 안됨. 고칠 것!
         if (Vector3.Distance(playerPos, enemyPos) < safeDistance && enableSpawn)
         {
             Vector3 dir = playerPos - enemyPos;
