@@ -61,12 +61,41 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    private void Awake()
+    private void Start()
     {
         playerRigidbody = GetComponent<Rigidbody2D>();
+
+        EventManager.StartListening(ConstantManager.PLAYER_BIG, PlayerScaleControll);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.StopListening(ConstantManager.PLAYER_BIG, PlayerScaleControll);
     }
 
     void Update()
+    {
+        CheckingPlayerState();
+        InputKey();
+        RotateDirectionObject();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+        GameOverCheck();
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMYBULLET))
+        {
+            CollisionWithEnemyBullet();
+        }
+    }
+
+    private void CheckingPlayerState()
     {
         if (uiManager.GetComponent<UIManager>().isGameStart == false)
         {
@@ -84,29 +113,14 @@ public class PlayerMove : MonoBehaviour
         float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
         sizeSpeed = Mathf.Lerp(1, 5, myLerp);
 
+    }
 
-
+    private void InputKey()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             Bullet bulletGo = BulletPoolManager.instance.BulletShoot();
             Shoot(bulletGo);
-        }
-
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-        RotateDirectionObject();
-    }
-
-    private void FixedUpdate()
-    {
-        Move();
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-
-        if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMYBULLET))
-        {
-            CollisionWithEnemyBullet();
         }
     }
 
@@ -132,7 +146,10 @@ public class PlayerMove : MonoBehaviour
         Vector2 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector2 dirVec = mousePos - (Vector2)transform.position;
         transform.up = dirVec.normalized;
+    }
 
+    private void GameOverCheck()
+    {
         if (transform.localScale.x <= 0 && transform.localScale.y <= 0)
         {
             PlayerDie();
@@ -154,27 +171,26 @@ public class PlayerMove : MonoBehaviour
 
     private void RotateDirectionObject()
     {
-        Vector3 mousePos = cam.ScreenToWorldPoint
-            (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
-        mousePos.z = 0;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
 
+        Vector3 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+        mousePos.z = 0;
 
         Vector3 dir = (mousePos - transform.position).normalized;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         directionObject.localEulerAngles = new Vector3(0, 0, angle);
-        //  transform.localEulerAngles = new Vector3(0, 0, angle);
     }
 
+    // 적 맞혔을때.
     public void PlayerScaleControll()
     {
-        // 적 맞혔을때.
-        Radius += 0.5f;
+        Radius += 1f;
     }
 
+    // 총알 발사했을때.
     void PlayerScale()
     {
-        // 총알 발사했을때.
         Radius -= 0.05f;
     }
 

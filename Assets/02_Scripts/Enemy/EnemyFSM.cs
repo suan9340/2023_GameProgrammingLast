@@ -75,7 +75,7 @@ public class EnemyFSM : MonoBehaviour
         {
             Destroy(gameObject);
             ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.enemyDie, gameObject.transform.position);
-
+            EventManager.TriggerEvent(ConstantManager.PLAYER_BIG);
         }
     }
 
