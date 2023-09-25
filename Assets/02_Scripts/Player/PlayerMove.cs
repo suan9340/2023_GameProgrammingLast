@@ -51,7 +51,7 @@ public class PlayerMove : MonoBehaviour
         {
             isScaleChange = true;
             radius = value;
-            transform.DOScale(Vector2.one * radius, 0.3f).SetEase(Ease.OutElastic).OnComplete(() => isScaleChange = false);
+            transform.DOScale(Vector2.one * radius, 0.7f).SetEase(Ease.OutQuad).OnComplete(() => isScaleChange = false);
 
             if (2f < radius && radius < 4f)
             {
@@ -73,7 +73,7 @@ public class PlayerMove : MonoBehaviour
             return;
         }
 
-        if(!isScaleChange)
+        if (!isScaleChange)
         {
             // 서서히 줄어드는 것.
             radius -= Time.deltaTime * 0.02f;
@@ -84,7 +84,7 @@ public class PlayerMove : MonoBehaviour
         float myLerp = 1 - (Mathf.Clamp(transform.localScale.x, 0, 5) / 5);
         sizeSpeed = Mathf.Lerp(1, 5, myLerp);
 
-        
+
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -107,11 +107,20 @@ public class PlayerMove : MonoBehaviour
         {
             PlayerDie();
         }
-        if (collision.gameObject.CompareTag("ENEMYBULLET") && transform.localScale.x > 0
-           && transform.localScale.y > 0)
+
+        if (collision.gameObject.CompareTag("ENEMYBULLET"))
+        {
+            CollisionWithEnemyBullet();
+        }
+    }
+
+    private void CollisionWithEnemyBullet()
+    {
+        if (transform.localScale.x > 0 && transform.localScale.y > 0)
         {
             isScaleChange = true;
-            Radius -= 0.5f;
+
+            Radius -= 0.2f;
         }
     }
 
@@ -153,12 +162,12 @@ public class PlayerMove : MonoBehaviour
             (new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         mousePos.z = 0;
 
-     
+
         Vector3 dir = (mousePos - transform.position).normalized;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-       directionObject.localEulerAngles = new Vector3(0, 0, angle);
-      //  transform.localEulerAngles = new Vector3(0, 0, angle);
+        directionObject.localEulerAngles = new Vector3(0, 0, angle);
+        //  transform.localEulerAngles = new Vector3(0, 0, angle);
     }
 
     public void PlayerScaleControll()
@@ -170,7 +179,7 @@ public class PlayerMove : MonoBehaviour
     void PlayerScale()
     {
         // 총알 발사했을때.
-        Radius -= 0.1f;
+        Radius -= 0.05f;
     }
 
     public void PlayerDie()

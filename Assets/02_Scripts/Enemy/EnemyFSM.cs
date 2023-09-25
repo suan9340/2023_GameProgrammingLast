@@ -18,6 +18,8 @@ public class EnemyFSM : MonoBehaviour
     public Transform bulletSpawnPoint;
     public float bulletSpeed = 2f;
 
+    [Header("EnemyInfo")]
+    public float hp = 20;
     enum State
     {
         Idle,
@@ -56,7 +58,7 @@ public class EnemyFSM : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BULLET"))
         {
-            Destroy(gameObject);
+            CollisionWithBullet(5f);
         }
         if (collision.gameObject.CompareTag("BORDER"))
         {
@@ -65,12 +67,23 @@ public class EnemyFSM : MonoBehaviour
         }
     }
 
+    private void CollisionWithBullet(float _damage)
+    {
+        hp -= _damage;
+
+        if (hp <= 0)
+        {
+            Destroy(gameObject);
+            ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.enemyDie, gameObject.transform.position);
+            
+        }
+    }
 
     void IdleState()
     {
 
         float dist = Vector3.Distance(transform.position, player.gameObject.transform.position);
-        
+
         if (stateTimer > 0)
         {
             stateTimer = -Random.Range(2.5f, 5f);
@@ -89,8 +102,8 @@ public class EnemyFSM : MonoBehaviour
     {
 
         float dist = Vector3.Distance(transform.position, player.gameObject.transform.position);
-          Vector3 dir = (player.gameObject.transform.position - transform.position).normalized;
-           transform.position += dir * enemySpeed * Time.deltaTime;
+        Vector3 dir = (player.gameObject.transform.position - transform.position).normalized;
+        transform.position += dir * enemySpeed * Time.deltaTime;
 
         //만약 거리가 10보다 멀면 idle으로!
         if (dist > 12)

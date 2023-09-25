@@ -8,12 +8,6 @@ public class Bullet : MonoBehaviour
     private PlayerMove player;
 
     public float moveSpeed = 10.0f;
-    public bool isEnemy = false;
-
-    private void Awake()
-    {
-        
-    }
 
     public IObjectPool<GameObject> Pool { get; set; }
 
@@ -21,15 +15,12 @@ public class Bullet : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("BORDER"))
         {
-            //Pool.Release(this.gameObject);
             BulletPoolManager.instance.PoolReturn(this);
         }
-        else if (collision.gameObject.CompareTag("ENEMY"))
+
+        if (collision.gameObject.CompareTag("ENEMY"))
         {
-            isEnemy = true;
-            // Pool.Release(this.gameObject);
             BulletPoolManager.instance.PoolReturn(this);
-            player.PlayerScaleControll();
         }
     }
 
