@@ -11,9 +11,22 @@ public class UIManager : MonoBehaviour
 
     public bool isGameStart = false;
 
-    void Awake()
+
+    [Header("InGameEffectObj")]
+    public GameObject playerHitImage = null;
+    private void Awake()
     {
         Time.timeScale = 0;
+
+        gameStartPanel.SetActive(true);
+        gameOverPanel.SetActive(false);
+
+        playerHitImage.SetActive(false);
+    }
+
+    private void Start()
+    {
+        EventManager.StartListening(ConstantManager.PLAYER_DAMAGED_EF, PlayerDamaged);
     }
 
     private void Update()
@@ -22,6 +35,11 @@ public class UIManager : MonoBehaviour
         {
             GameStart();
         }
+    }
+
+    private void OnDisable()
+    {
+        EventManager.StopListening(ConstantManager.PLAYER_DAMAGED_EF, PlayerDamaged);
     }
 
     public void GameStart()
@@ -52,4 +70,17 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    private void PlayerDamaged()
+    {
+        StartCoroutine(PlayerDamagedEffectCor());
+    }
+
+    private IEnumerator PlayerDamagedEffectCor()
+    {
+        playerHitImage.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        playerHitImage.SetActive(false);
+
+        yield break;
+    }
 }

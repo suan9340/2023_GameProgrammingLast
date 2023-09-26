@@ -22,6 +22,7 @@ public class PlayerMove : MonoBehaviour
     public float moveSpeed;
 
     [SerializeField] private Transform directionObject;
+    public Transform bulletPos;
 
     [Header("카메라 관련")]
     public CinemachineVirtualCamera playerVcam;
@@ -79,11 +80,11 @@ public class PlayerMove : MonoBehaviour
         InputKey();
         Move();
         RotateDirectionObject();
+        //Debug.Log(Radius);
     }
 
     private void FixedUpdate()
     {
-
         GameOverCheck();
     }
 
@@ -93,6 +94,16 @@ public class PlayerMove : MonoBehaviour
         if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMYBULLET))
         {
             CollisionWithEnemyBullet();
+        }
+
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMY))
+        {
+            CollisionWithEnemyBullet();
+        }
+
+        if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
+        {
+            Debug.Log("qqqq");
         }
     }
 
@@ -128,11 +139,15 @@ public class PlayerMove : MonoBehaviour
 
     private void CollisionWithEnemyBullet()
     {
+        EventManager.TriggerEvent(ConstantManager.PLAYER_DAMAGED_EF);
+        CameraShake.Instance.ShakeCamera(1f, 0.5f);
+
         if (transform.localScale.x > 0 && transform.localScale.y > 0)
         {
             isScaleChange = true;
 
-            Radius -= 0.2f;
+            var _sa = Radius / 5;
+            Radius -= _sa;
         }
     }
 
@@ -163,7 +178,7 @@ public class PlayerMove : MonoBehaviour
         dir.Normalize();
 
         _obj.GetComponent<Bullet>().Init(this);
-        _obj.transform.position = bulletSpawnPoint.position;
+        _obj.transform.position = bulletPos.transform.position;
         _obj.GetComponent<Rigidbody2D>().AddForce(dir * bulletSpeed, ForceMode2D.Impulse);
 
         PlayerScale();

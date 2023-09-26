@@ -6,19 +6,40 @@ using UnityEngine.Pool;
 public class Bullet : MonoBehaviour
 {
     private PlayerMove player;
+    private Animator myAnim = null;
+    private Rigidbody2D myrigid;
     public IObjectPool<GameObject> Pool { get; set; }
+
+    private void Start()
+    {
+        myAnim = GetComponent<Animator>();
+        myrigid = GetComponent<Rigidbody2D>();
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
         {
-            BulletPoolManager.instance.PoolReturn(this);
+            StopBullet();
         }
 
         if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMY))
         {
-            BulletPoolManager.instance.PoolReturn(this);
+            StopBullet();
         }
+    }
+
+    private void StopBullet()
+    {
+        myAnim.SetTrigger("isDie");
+        myrigid.velocity = Vector3.zero;
+        myrigid.isKinematic = true;
+        Invoke(nameof(BulletAnim), 1.34f);
+    }
+
+    private void BulletAnim()
+    {
+        BulletPoolManager.instance.PoolReturn(this);
     }
 
     public void Init(PlayerMove owner)
