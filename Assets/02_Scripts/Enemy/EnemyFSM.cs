@@ -22,7 +22,14 @@ public class EnemyFSM : MonoBehaviour
     [Header("EnemyInfo")]
     public float hp = 20;
 
+    public GameObject band_1 = null;
+
+    private float curHp = 0;
+    private float bandHp = 0;
+
     private SpriteRenderer mySprite = null;
+    public SpriteRenderer bandSprite = null;
+    private Animator myAnim = null;
 
 
     enum State
@@ -37,11 +44,17 @@ public class EnemyFSM : MonoBehaviour
     {
         stateTimer = 0;
         curState = state;
-    }
 
+    }
     private void Start()
     {
         mySprite = GetComponent<SpriteRenderer>();
+        myAnim = GetComponent<Animator>();
+
+        curHp = hp;
+        bandHp = curHp / 2;
+        band_1.SetActive(false);
+
         InvokeRepeating(nameof(Shoot), 0, 2);
     }
 
@@ -61,6 +74,12 @@ public class EnemyFSM : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        curHp = hp;
+        band_1.SetActive(false);
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag(ConstantManager.TAG_BULLET))
@@ -76,22 +95,34 @@ public class EnemyFSM : MonoBehaviour
 
     private void CollisionWithBullet(float _damage)
     {
-        hp -= _damage;
+        curHp -= _damage;
         CameraShake.Instance.ShakeCamera(3f, 0.8f);
         ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.blood, gameObject.transform.position);
         StartCoroutine(EnemyHitColorChange());
 
-        if (hp <= 0)
+        if (curHp <= 10)
         {
-            Destroy(gameObject);
+            band_1.SetActive(true);
+        }
+
+        if (curHp <= 0)
+        {
+            myAnim.SetTrigger("isEnemyDIe");
+            ChangeState(State.Die);
+            band_1.SetActive(false);
+            Invoke(nameof(EnemyDieReady), 1.17f);
             ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.enemyDie, gameObject.transform.position);
             EventManager.TriggerEvent(ConstantManager.PLAYER_BIG);
         }
     }
 
+    private void EnemyDieReady()
+    {
+        Destroy(gameObject);
+    }
+
     void IdleState()
     {
-
         float dist = Vector3.Distance(transform.position, player.gameObject.transform.position);
 
         if (stateTimer > 0)
@@ -127,8 +158,13 @@ public class EnemyFSM : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             mySprite.color = new Color(1f, 0.7f, 0.7f, 1f);
+            bandSprite.color = new Color(1f, 0.7f, 0.7f, 1f);
+
             yield return new WaitForSeconds(0.1f);
+
             mySprite.color = new Color(1f, 1f, 1f, 1f);
+            bandSprite.color = new Color(1f, 1f, 1f, 1f);
+
             yield return new WaitForSeconds(0.1f);
         }
 
