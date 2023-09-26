@@ -77,9 +77,13 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator PlayerDamagedEffectCor()
     {
-        playerHitImage.SetActive(true);
-        yield return new WaitForSeconds(0.2f);
-        playerHitImage.SetActive(false);
+        for(int i = 0;i<2;i++)
+        {
+            playerHitImage.SetActive(true);
+            yield return new WaitForSeconds(0.1f);
+            playerHitImage.SetActive(false);
+            yield return new WaitForSeconds(0.1f);
+        }
 
         yield break;
     }

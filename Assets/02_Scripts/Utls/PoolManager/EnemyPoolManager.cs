@@ -14,7 +14,9 @@ public class EnemyPoolManager : MonoBehaviour
 
     private Queue<EnemyFSM> enemyPool = new();
 
+    [Header("Objects")]
     [SerializeField] private EnemyFSM enemyPrefab;
+    public GameObject enemyWarning = null;
 
     private void Awake()
     {
@@ -23,7 +25,7 @@ public class EnemyPoolManager : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("SpawnEnemy", 1, 5);
+        InvokeRepeating(nameof(SpawnEnemy), 1, 3);
 
         for (int i = 0; i < 15; i++)
         {
@@ -41,7 +43,7 @@ public class EnemyPoolManager : MonoBehaviour
         float randomY = Random.Range(-17f, 17f);
 
         Vector3 playerPos = playerMoveScript.transform.position;
-        Vector3 enemyPos = new Vector2(randomX, randomY);
+        Vector3 enemyPos = new Vector3(randomX, randomY, 0);
 
         // 적이 나오는 위치 = 플레이어 위치 + 방향 * 안전거리 * 랜덤(1.0f, 1.5f);
 
@@ -50,15 +52,25 @@ public class EnemyPoolManager : MonoBehaviour
             Vector3 dir = playerPos - enemyPos;
             dir.Normalize();
             enemyPos = playerPos + dir * safeDistance * Random.Range(1f, 1.5f);
-            EnemyFSM enemy = EnemySpawn(enemyPos);
-            enemy.GetComponent<EnemyFSM>().EnemyInit(playerMoveScript);
-        }
-        else
-        {
-            EnemyFSM enemy = EnemySpawn(enemyPos);
-            enemy.GetComponent<EnemyFSM>().EnemyInit(playerMoveScript);
         }
 
+
+        StartCoroutine(EnemyInstanceReady(enemyPos));
+
+    }
+
+    private IEnumerator EnemyInstanceReady(Vector3 _enemyPos)
+    {
+        GameObject _obj = Instantiate(enemyWarning, _enemyPos, Quaternion.identity);
+
+
+        yield return new WaitForSeconds(2f);
+        Destroy(_obj);
+
+        EnemyFSM enemy = EnemySpawn(_enemyPos);
+        enemy.GetComponent<EnemyFSM>().EnemyInit(playerMoveScript);
+
+        yield break;
     }
 
     public EnemyFSM EnemySpawn(Vector3 _pos)

@@ -36,14 +36,6 @@ public class PlayerMove : MonoBehaviour
     [Header("매니저 관련")]
     public UIManager uiManager;
 
-    public enum Level
-    {
-        Level_1,
-        Level_2,
-        Level_3,
-        Level_4,
-        Level_5,
-    }
 
     public float Radius
     {
@@ -103,9 +95,10 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
         {
-            Debug.Log("qqqq");
+            
         }
     }
+
 
     private void CheckingPlayerState()
     {
@@ -162,6 +155,8 @@ public class PlayerMove : MonoBehaviour
         Vector2 dirVec = mousePos - (Vector2)transform.position;
         transform.up = dirVec.normalized;
     }
+
+
 
     private void GameOverCheck()
     {

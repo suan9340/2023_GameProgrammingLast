@@ -33,7 +33,6 @@ public class Bullet : MonoBehaviour
     {
         myAnim.SetTrigger("isDie");
         myrigid.velocity = Vector3.zero;
-        myrigid.isKinematic = true;
         Invoke(nameof(BulletAnim), 1.34f);
     }
 
