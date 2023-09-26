@@ -102,11 +102,6 @@ public class PlayerMove : MonoBehaviour
         {
             CollisionWithEnemyBullet();
         }
-
-        if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
-        {
-
-        }
     }
 
 

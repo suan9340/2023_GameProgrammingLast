@@ -9,6 +9,7 @@ public static class ConstantManager
     public static string TAG_ENEMY = "ENEMY";
     public static string TAG_BORDER = "BORDER";
     public static string TAG_PLAYER = "Player";
+    public static string TAG_ITEM = "ITEM";
 
     public static string PLAYER_BIG = "PlayerSizeUP";
 
