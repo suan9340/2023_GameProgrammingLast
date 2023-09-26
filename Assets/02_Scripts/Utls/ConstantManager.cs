@@ -14,4 +14,5 @@ public static class ConstantManager
 
     // UIManager
     public static string PLAYER_DAMAGED_EF = "PlayerDamaged";
+    public static string SCORE = "Score";
 }

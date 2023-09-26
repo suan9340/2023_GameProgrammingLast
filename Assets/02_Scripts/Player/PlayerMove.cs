@@ -68,6 +68,11 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
+        if (GameManager.Instance.gameState != DefineManager.GameState.Playing)
+        {
+            return;
+        }
+
         CheckingPlayerState();
         InputKey();
         Move();
@@ -77,6 +82,11 @@ public class PlayerMove : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.Instance.gameState != DefineManager.GameState.Playing)
+        {
+            return;
+        }
+
         GameOverCheck();
     }
 
@@ -95,7 +105,7 @@ public class PlayerMove : MonoBehaviour
 
         if (collision.gameObject.CompareTag(ConstantManager.TAG_BORDER))
         {
-            
+
         }
     }
 
@@ -132,6 +142,7 @@ public class PlayerMove : MonoBehaviour
 
     private void CollisionWithEnemyBullet()
     {
+        GameManager.Instance.MinusScore(1f);
         EventManager.TriggerEvent(ConstantManager.PLAYER_DAMAGED_EF);
         CameraShake.Instance.ShakeCamera(1f, 0.5f);
 
@@ -195,7 +206,7 @@ public class PlayerMove : MonoBehaviour
     // 적 맞혔을때.
     public void PlayerScaleControll()
     {
-        Radius += 1f;
+        Radius += 0.3f;
     }
 
     // 총알 발사했을때.

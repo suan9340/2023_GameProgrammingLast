@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class UIManager : MonoBehaviour
 
     [Header("InGameEffectObj")]
     public GameObject playerHitImage = null;
+
+    [Header("Score")]
+    public TextMeshProUGUI scoreText;
     private void Awake()
     {
         Time.timeScale = 0;
@@ -27,11 +31,14 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         EventManager.StartListening(ConstantManager.PLAYER_DAMAGED_EF, PlayerDamaged);
+
+        ConnectScoreText();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        ConnectScoreText();
+        if (Input.GetKeyDown(KeyCode.Space) && GameManager.Instance.gameState == DefineManager.GameState.Menu)
         {
             GameStart();
         }
@@ -42,8 +49,14 @@ public class UIManager : MonoBehaviour
         EventManager.StopListening(ConstantManager.PLAYER_DAMAGED_EF, PlayerDamaged);
     }
 
+    public void ConnectScoreText()
+    {
+        scoreText.text = $"Score : {GameManager.Instance.score}";
+    }
+
     public void GameStart()
     {
+        GameManager.Instance.gameState = DefineManager.GameState.Playing;
         isGameStart = true;
 
         Time.timeScale = 1;
@@ -61,6 +74,7 @@ public class UIManager : MonoBehaviour
 
     public void GameOverPanel()
     {
+        GameManager.Instance.gameState = DefineManager.GameState.GameOver;
         gameOverPanel.SetActive(true);
     }
 
@@ -77,13 +91,9 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator PlayerDamagedEffectCor()
     {
-        for(int i = 0;i<2;i++)
-        {
-            playerHitImage.SetActive(true);
-            yield return new WaitForSeconds(0.1f);
-            playerHitImage.SetActive(false);
-            yield return new WaitForSeconds(0.1f);
-        }
+        playerHitImage.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        playerHitImage.SetActive(false);
 
         yield break;
     }

@@ -107,6 +107,7 @@ public class EnemyFSM : MonoBehaviour
 
         if (curHp <= 0)
         {
+            GameManager.Instance.AddScore(3f);
             myAnim.SetTrigger("isEnemyDIe");
             ChangeState(State.Die);
             band_1.SetActive(false);
