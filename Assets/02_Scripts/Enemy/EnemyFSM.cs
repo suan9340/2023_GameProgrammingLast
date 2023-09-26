@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class EnemyFSM : MonoBehaviour
 {
@@ -20,12 +21,17 @@ public class EnemyFSM : MonoBehaviour
 
     [Header("EnemyInfo")]
     public float hp = 20;
+
+    private SpriteRenderer mySprite = null;
+
+
     enum State
     {
         Idle,
         Chase,
         Die,
     }
+
 
     void ChangeState(State state)
     {
@@ -35,7 +41,8 @@ public class EnemyFSM : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating("Shoot", 0, 2);
+        mySprite = GetComponent<SpriteRenderer>();
+        InvokeRepeating(nameof(Shoot), 0, 2);
     }
 
     private void Update()
@@ -72,6 +79,7 @@ public class EnemyFSM : MonoBehaviour
         hp -= _damage;
         CameraShake.Instance.ShakeCamera(3f, 0.8f);
         ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.blood, gameObject.transform.position);
+        StartCoroutine(EnemyHitColorChange());
 
         if (hp <= 0)
         {
@@ -114,6 +122,18 @@ public class EnemyFSM : MonoBehaviour
         }
     }
 
+    private IEnumerator EnemyHitColorChange()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            mySprite.color = new Color(1f, 0.7f, 0.7f, 1f);
+            yield return new WaitForSeconds(0.1f);
+            mySprite.color = new Color(1f, 1f, 1f, 1f);
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield break;
+    }
     void Shoot()
     {
         GameObject enemyBullet = Instantiate(bulletPrefab);
