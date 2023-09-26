@@ -120,7 +120,7 @@ public class PlayerMove : MonoBehaviour
         if (!isScaleChange)
         {
             // 서서히 줄어드는 것.
-            radius -= Time.deltaTime * 0.02f;
+            radius -= Time.deltaTime * 0.04f;
             transform.localScale = Vector2.one * radius;
         }
 
@@ -179,6 +179,7 @@ public class PlayerMove : MonoBehaviour
 
     private void Shoot(Bullet _obj)
     {
+        SoundManager.Instance.BulletShoot();
         Vector3 dir = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)) - gameObject.transform.position;
         dir.z = 0;
         dir.Normalize();
@@ -206,13 +207,13 @@ public class PlayerMove : MonoBehaviour
     // 적 맞혔을때.
     public void PlayerScaleControll()
     {
-        Radius += 0.3f;
+        Radius += 0.4f;
     }
 
     // 총알 발사했을때.
     void PlayerScale()
     {
-        Radius -= 0.05f;
+        Radius -= 0.04f;
     }
 
     public void PlayerDie()

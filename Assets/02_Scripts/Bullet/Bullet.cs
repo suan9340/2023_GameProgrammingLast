@@ -31,7 +31,6 @@ public class Bullet : MonoBehaviour
         if (collision.gameObject.CompareTag(ConstantManager.TAG_ENEMYBULLET))
         {
             Debug.Log("qwe");
-            StopBullet();
         }
     }
 

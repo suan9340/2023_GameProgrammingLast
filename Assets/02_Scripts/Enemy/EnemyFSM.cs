@@ -32,6 +32,7 @@ public class EnemyFSM : MonoBehaviour
     private Animator myAnim = null;
 
 
+    private bool isDie = false;
     enum State
     {
         Idle,
@@ -78,6 +79,7 @@ public class EnemyFSM : MonoBehaviour
     {
         curHp = hp;
         band_1.SetActive(false);
+        isDie = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -107,6 +109,10 @@ public class EnemyFSM : MonoBehaviour
 
         if (curHp <= 0)
         {
+            if (isDie) return;
+            isDie = true;
+            
+            SoundManager.Instance.EnemyDieShoot();
             GameManager.Instance.AddScore(3f);
             myAnim.SetTrigger("isEnemyDIe");
             ChangeState(State.Die);

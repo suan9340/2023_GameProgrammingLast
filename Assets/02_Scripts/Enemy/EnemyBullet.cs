@@ -6,9 +6,6 @@ public class EnemyBullet : MonoBehaviour
 {
     private void OnCollisionEnter2D(Collision2D collision)
     {
-       // if (gameObject.CompareTag("BORDER"))
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }
