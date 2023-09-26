@@ -31,6 +31,7 @@ public class ParticleManager : MonoBehaviour
     public enum ParticleType
     {
         enemyDie,
+        blood,
     }
 
     private void Start()
@@ -53,6 +54,14 @@ public class ParticleManager : MonoBehaviour
                 if (false == particleDic.ContainsKey(pt))
                 {
                     particleDic[pt] = Resources.Load<GameObject>("VFX/EnemyDieParticle");
+                }
+                break;
+
+
+            case ParticleType.blood:
+                if (false == particleDic.ContainsKey(pt))
+                {
+                    particleDic[pt] = Resources.Load<GameObject>("VFX/Blood");
                 }
                 break;
 

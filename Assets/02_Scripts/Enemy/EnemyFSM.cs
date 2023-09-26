@@ -70,6 +70,8 @@ public class EnemyFSM : MonoBehaviour
     private void CollisionWithBullet(float _damage)
     {
         hp -= _damage;
+        CameraShake.Instance.ShakeCamera(3f, 0.8f);
+        ParticleManager.Instance.AddParticle(ParticleManager.ParticleType.blood, gameObject.transform.position);
 
         if (hp <= 0)
         {

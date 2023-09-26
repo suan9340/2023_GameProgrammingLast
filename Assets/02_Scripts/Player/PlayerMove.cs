@@ -77,12 +77,13 @@ public class PlayerMove : MonoBehaviour
     {
         CheckingPlayerState();
         InputKey();
+        Move();
         RotateDirectionObject();
     }
 
     private void FixedUpdate()
     {
-        Move();
+
         GameOverCheck();
     }
 
@@ -119,6 +120,7 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            CameraShake.Instance.ShakeCamera(0.8f, 0.1f);
             Bullet bulletGo = BulletPoolManager.instance.BulletShoot();
             Shoot(bulletGo);
         }
@@ -136,12 +138,10 @@ public class PlayerMove : MonoBehaviour
 
     void Move()
     {
-        Vector2 moveInput;
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
-        moveInput.Normalize();
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
 
-        playerRigidbody.velocity = moveInput * sizeSpeed;
+        transform.Translate(new Vector2(x, y) * Time.deltaTime * sizeSpeed);
 
         Vector2 mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
         Vector2 dirVec = mousePos - (Vector2)transform.position;

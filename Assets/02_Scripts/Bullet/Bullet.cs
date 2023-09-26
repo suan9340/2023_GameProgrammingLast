@@ -6,9 +6,6 @@ using UnityEngine.Pool;
 public class Bullet : MonoBehaviour
 {
     private PlayerMove player;
-
-    public float moveSpeed = 10.0f;
-
     public IObjectPool<GameObject> Pool { get; set; }
 
     private void OnCollisionEnter2D(Collision2D collision)
